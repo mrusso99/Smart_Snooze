@@ -1,17 +1,14 @@
-import BuzzControls
-from LedControls import *
 import streams
+from LedControls import Leds
+from BuzzerControls import BuzzControls
 
 streams.serial()
 
 
 while True:
-    print("in da loop")
-    #digitalWrite(D23,HIGH)
-    #sleep(4000)
-    #Leds.color_selector("red")
+    Leds.color_selector("red")
     sleep(500)
-    #Leds.color_selector("magenta")
+    Leds.color_selector("magenta")
     sleep(500)
     Leds.color_selector("blue")
     sleep(500)
@@ -19,7 +16,7 @@ while True:
     sleep(500)
     Leds.color_selector("green")
     sleep(500)
-    #Leds.color_selector("yellow")
+    Leds.color_selector("yellow")
     sleep(500)
     Leds.color_selector("white")
-    sleep(1000)
+    sleep(500)
