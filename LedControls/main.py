@@ -17,6 +17,7 @@ make_color = {
     "magenta": make_magenta,
     "cyan": make_cyan,
     "white": make_white
+    "brown": "gianni"
     }
     
 def color_selector(color) :
