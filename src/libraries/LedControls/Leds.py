@@ -65,6 +65,26 @@ def color_selector(color) :
     #Picks the right function from the dictionary make_color and runs it:
     make_chosen_color = make_color[color]
     make_chosen_color()
+    
+    
+def loop():
+    """Call it in a thread to test threads with the LED"""
+    
+    while True:
+        color_selector("red")
+        sleep(500)
+        color_selector("green")
+        sleep(500)       
+        color_selector("blue")
+        sleep(500)        
+        color_selector("yellow")
+        sleep(500)
+        color_selector("magenta")
+        sleep(500)
+        color_selector("cyan")
+        sleep(500)       
+        color_selector("white")
+        sleep(500)        
 
 
 

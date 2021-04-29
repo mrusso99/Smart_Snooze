@@ -5,7 +5,7 @@ import pwm
 streams.serial()
 
 # the pin where the buzzer is attached to
-buzzerpin = D16.PWM
+buzzerpin = A4.PWM
 a4 = 440
 c5 = 550
 e5 = 660
