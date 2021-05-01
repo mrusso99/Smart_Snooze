@@ -4,9 +4,9 @@
 
 
 # Set the PINS for the LEDS. TODO: Change the mapping based on Marco's schematics.
-red_pin = D23
-green_pin = D22
-blue_pin = D21
+red_pin = D27
+green_pin = D14
+blue_pin = D12
 
 pinMode(red_pin,OUTPUT)
 pinMode(green_pin,OUTPUT)
@@ -55,22 +55,28 @@ make_color = {
     "white": make_white
     }
     
-def color_selector(color) :
-    """Changes color based on user's selection"""
+def reset():
+    """Resets the light"""
     
-    #Resets the light:
     digitalWrite(red_pin, LOW)
     digitalWrite(green_pin, LOW)
     digitalWrite(blue_pin, LOW)
+    
+def color_selector(color) :
+    """Changes color based on user's selection"""
+    
+    reset()
     #Picks the right function from the dictionary make_color and runs it:
     make_chosen_color = make_color[color]
     make_chosen_color()
     
     
-def loop():
+def loop(alarm):
     """Call it in a thread to test threads with the LED"""
     
     while True:
+        reset()
+        alarm.wait()
         color_selector("red")
         sleep(500)
         color_selector("green")
@@ -85,6 +91,7 @@ def loop():
         sleep(500)       
         color_selector("white")
         sleep(500)        
+
 
 
 

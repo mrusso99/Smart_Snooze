@@ -23,9 +23,17 @@ pinMode(buzzerpin,OUTPUT) #set buzzerpin to output mode
 
 note = 0 
 
-def sing(melody):
+def reset():
+    """Stops the buzzer"""
+    
+    pwm.write(buzzerpin,0,0)
+    note = 0
+
+def sing(melody,alarm):
     song = sequences[melody]
     while True:
+        reset()
+        alarm.wait()
         frequency = song[note]
         period=1000000//frequency #we are using MICROS so every sec is 1000000 of micros. // is the int division, pwm.write period doesn't accept floats
         print("frequency is", frequency,"Hz")
@@ -33,3 +41,5 @@ def sing(melody):
         pwm.write(buzzerpin,period,period//2,MICROS)
         note = (note+1)%len(song)
         sleep(500)
+        
+        
