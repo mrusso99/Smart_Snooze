@@ -72,11 +72,9 @@ def color_selector(color) :
     
     
 def loop(alarm):
-    """Call it in a thread to test threads with the LED"""
+    """Call it in a thread to loop every color during an alarm"""
     
-    while True:
-        reset()
-        alarm.wait()
+    while alarm.is_set():
         color_selector("red")
         sleep(500)
         color_selector("green")
@@ -90,7 +88,17 @@ def loop(alarm):
         color_selector("cyan")
         sleep(500)       
         color_selector("white")
-        sleep(500)        
+        sleep(500)
+        
+    reset()
+    
+def setAlarmColor(color,alarm):
+    """Sets the LED to a color while the alarm is on"""
+        
+    while alarm.is_set():
+        color_selector("magenta")
+        sleep(1000)
+    reset()
 
 
 
