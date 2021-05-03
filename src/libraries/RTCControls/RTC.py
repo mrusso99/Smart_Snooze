@@ -9,7 +9,7 @@ def watchForAlarms(alarmsList, alarm):
     while True:
         currentTime = ds.get_time()
         for alarmTime in alarmsList:
-            if (currentTime[0],currentTime[1]) == alarmTime:
+            if (currentTime[0],currentTime[1]) == alarmTime[0]:
                 alarm.set()
                 #TODO: Add here the threads to set the LED and the Buzzer properly based on the chosen alarmTime
                 
