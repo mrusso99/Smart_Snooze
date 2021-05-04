@@ -8,10 +8,8 @@ import threading
 button = D5
 pinMode(button,INPUT_PULLDOWN)
 
+
 #every alarm must follow this syntax: ((hours,minutes),color,song)
-<<<<<<< Updated upstream
-alarmList = [((13,01),"magenta",2),((17,18),"blue",3)   ]
-=======
 class MemorizedAlarm:
     def __init__(self,hour,minute,color,song):
         self.hour = hour
@@ -27,7 +25,6 @@ class MemorizedAlarm:
         
 #TODO: retrieve memorizedAlarms from MQTT server
 alarmList = [MemorizedAlarm(16,37,"magenta",3),MemorizedAlarm(10,43,"blue",2)]
->>>>>>> Stashed changes
 
 alarm = threading.Event()
 
