@@ -1,6 +1,7 @@
 import streams
 import adc
-import Math
+import math
+
 streams.serial()
 
 SERIESRESISTOR = 10000
@@ -30,7 +31,7 @@ def read():
     
     #gets the temperature value and converts it to celsius
     steinhart = resistance/NOMINAL_RESISTANCE #(R/R0)
-    steinhart = Math.log(steinhart,Math.e) #ln(R/R0)
+    steinhart = math.log(steinhart,math.e) #ln(R/R0)
     steinhart = steinhart/BCOEFFICIENT #1/B*ln(R/R0)
     steinhart = steinhart + 1.0/(NOMINAL_TEMPERATURE + 273.15) # (1/B*ln(R/R0)) + 1/T0 
     steinhart = 1/steinhart #inverts the formula
