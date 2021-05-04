@@ -4,6 +4,7 @@ from src.libraries import RTC
 from src.libraries import Leds
 from src.libraries import BuzzControls
 from src.libraries import DigitalTemperature
+from src.libraries import hcsr04
 import threading
 
 button = D5
@@ -42,6 +43,15 @@ def setAlarmOff():
 onPinRise(button,setAlarmOff)
 thread(RTC.watchForAlarms,alarmList,alarm)
 # loop forever
+
+sens = hcsr04.hcsr04(D23, D22)
+
+while True:
+    cm = sens.getDistanceCM()
+    
+    print("Distance: %.2f" % cm)
+    
+    sleep(1000)
 
 while True:
     print("%02d:%02d:%02d - %02d/%02d/%d - %d"%RTC.ds.get_time())

@@ -17,12 +17,12 @@ def read():
     """converts the raw value from the sensor to a value in Celsius  """
     #Gets the raw value from the sensor
     adcValue = adc.read(ntcPin)
-    print("analog = " +  str(adcValue))
+    print("analog = %d"%adcValue)
     
     #Gets the resistance
     resistance = (1023 / adcValue)
     resistance = SERIESRESISTOR / resistance
-    print("Resistance = " + str(resistance) + " Ohm")
+    print("Resistance = %.2f Ohm"%resistance)
     
     
     #gets the temperature value and converts it to celsius
@@ -33,6 +33,6 @@ def read():
     steinhart = 1/steinhart #inverts the formula
     steinhart = steinhart - 273.15 #converts to Celsius
     
-    print(str(steinhart) + " Celsius")
+    print("%.1f Celsius"%steinhart)
     return steinhart
     
