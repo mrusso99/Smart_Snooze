@@ -6,7 +6,7 @@ streams.serial()
 SERIESRESISTOR = 10000
 NOMINAL_RESISTANCE = 10000
 NOMINAL_TEMPERATURE = 25
-BCOEFFICIENT = 3100
+BCOEFFICIENT = 3950
  
 ntcPin = A1
 pinMode(ntcPin,INPUT_ANALOG)
@@ -21,10 +21,7 @@ def read():
     
     #Gets the resistance
     resistance = (1023 / adcValue)
-    if (resistance != 0):
-        resistance = SERIESRESISTOR / resistance
-    else: 
-        resistance = SERIESRESISTOR
+    resistance = SERIESRESISTOR / resistance
     print("Resistance = " + str(resistance) + " Ohm")
     
     
@@ -37,6 +34,5 @@ def read():
     steinhart = steinhart - 273.15 #converts to Celsius
     
     print(str(steinhart) + " Celsius")
-    sleep(1000)
     return steinhart
     
