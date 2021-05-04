@@ -8,9 +8,7 @@ button = D5
 pinMode(button,INPUT_PULLDOWN)
 
 #every alarm must follow this syntax: ((hours,minutes),color,song)
-alarmList = [((13,01),"magenta",2),
-             ((17,18),"blue",3)
-            ]
+alarmList = [((13,01),"magenta",2),((17,18),"blue",3)   ]
 
 alarm = threading.Event()
 
