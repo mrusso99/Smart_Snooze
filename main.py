@@ -3,6 +3,7 @@ streams.serial()
 from src.libraries import RTC
 from src.libraries import Leds
 from src.libraries import BuzzControls
+from src.libraries import DigitalTemperature
 import threading
 
 button = D5
@@ -44,4 +45,5 @@ thread(RTC.watchForAlarms,alarmList,alarm)
 
 while True:
     print("%02d:%02d:%02d - %02d/%02d/%d - %d"%RTC.ds.get_time())
+    DigitalTemperature.read()
     sleep(1000)
