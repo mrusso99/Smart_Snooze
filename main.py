@@ -1,14 +1,33 @@
 import streams
 streams.serial()
-from src.libraries.LedControls import Leds
-from src.libraries.BuzzerControls import BuzzControls
+from src.libraries import RTC
+from src.libraries import Leds
+from src.libraries import BuzzControls
 import threading
 
 button = D5
 pinMode(button,INPUT_PULLDOWN)
 
 #every alarm must follow this syntax: ((hours,minutes),color,song)
+<<<<<<< Updated upstream
 alarmList = [((13,01),"magenta",2),((17,18),"blue",3)   ]
+=======
+class MemorizedAlarm:
+    def __init__(self,hour,minute,color,song):
+        self.hour = hour
+        self.minute = minute
+        self.color = color
+        self.song = song
+        
+    def setSong(self,song):
+        self.song = song
+        
+    def setColor(self,color):
+        self.color = color
+        
+#TODO: retrieve memorizedAlarms from MQTT server
+alarmList = [MemorizedAlarm(16,37,"magenta",3),MemorizedAlarm(10,43,"blue",2)]
+>>>>>>> Stashed changes
 
 alarm = threading.Event()
 
@@ -23,10 +42,9 @@ def setAlarmOff():
         
 #Whenever the button is pressed, clear the alarm:
 onPinRise(button,setAlarmOff)
-
+thread(RTC.watchForAlarms,alarmList,alarm)
 # loop forever
-alarm.set()
-thread(Leds.setAlarmColor,"magenta",alarm)
-thread(BuzzControls.sing,3,alarm)
-#while True:
-    #sleep(5000)
+
+while True:
+    print("%02d:%02d:%02d - %02d/%02d/%d - %d"%RTC.ds.get_time())
+    sleep(1000)
