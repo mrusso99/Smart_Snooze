@@ -15,9 +15,15 @@ def watchForAlarms(alarmsList, alarm):
             if currentTime[0] == memorizedAlarm.hour and currentTime[1] == memorizedAlarm.minute:
                 if not alarm.is_set():
                     alarm.set()
-                    #TODO: Add here the threads to set the LED and the Buzzer properly based on the chosen alarmTime
+                    #Add the threads to set the LED and the Buzzer properly based on the chosen alarmTime and to check if the user wants a snooze.
+                    thread(hcsr04.checkDelays,memorizedAlarm,alarmsList,alarm)
                     thread(Leds.setAlarmColor,memorizedAlarm.color,alarm)
                     thread(BuzzControls.sing,memorizedAlarm.song,alarm)
+                    #Removes the delayedAlarm when the alarm clears.
+                    if memorizedAlarm.isDelayed:
+                        while alarm.is_set():
+                            sleep(1000)
+                        alarmsList.remove(memorizedAlarm)
                     sleep(60000)
         sleep(1000)
         

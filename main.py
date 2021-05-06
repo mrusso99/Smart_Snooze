@@ -10,14 +10,13 @@ import threading
 button = D5
 pinMode(button,INPUT_PULLDOWN)
 
-
-#every alarm must follow this syntax: ((hours,minutes),color,song)
 class MemorizedAlarm:
     def __init__(self,hour,minute,color,song):
         self.hour = hour
         self.minute = minute
         self.color = color
         self.song = song
+        self.isDelayed = False
         
     def setSong(self,song):
         self.song = song
@@ -46,13 +45,13 @@ thread(RTC.watchForAlarms,alarmList,alarm)
 
 sens = hcsr04.hcsr04(D23, D22)
 
-while True:
+while False:
     cm = sens.getDistanceCM()
     
     print("Distance: %.2f" % cm)
     
     sleep(1000)
-
+    
 while True:
     print("%02d:%02d:%02d - %02d/%02d/%d - %d"%RTC.ds.get_time())
     DigitalTemperature.read()
