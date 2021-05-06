@@ -56,25 +56,23 @@ class lcd:
 
 
 
-        self.port=i2c.I2C(I2C1, 0x27, 400000) 
+# Initialise display
 
-        self.port.start()
+        self.lcd_byte(0x33,self.LCD_CMD) # 110011 Initialise
 
-        self.port.lock()
+        self.lcd_byte(0x32,self.LCD_CMD) # 110010 Initialise
 
-        self.port.write_bytes(0x33,0) # Inizializzazione
+        self.lcd_byte(0x06,self.LCD_CMD) # 000110 Cursor move direction
 
-        self.port.write_bytes(0x32,0) # Inizializzazione
+        self.lcd_byte(0x0C,self.LCD_CMD) # 001100 Display On,Cursor Off, Blink Off 
 
-        self.port.write_bytes(0x06,0) # Cursore
+        self.lcd_byte(0x28,self.LCD_CMD) # 101000 Data length, number of lines, font size
 
-        self.port.write_bytes(0x0C,0) # Accendi Display
+        self.lcd_byte(0x01,self.LCD_CMD) # 000001 Clear display
 
-        self.port.write_bytes(0x28,0) # Lunghezza di righe 
+        sleep(self.E_DELAY)
 
-        self.port.write_bytes(0x01,0) # reset display 
-
-
+        
 
     def lcd_byte(self, bits, mode):
 
@@ -112,35 +110,31 @@ class lcd:
 
         sleep(self.E_DELAY)
 
-        self.port.write_bytes(self.I2C_ADDR, (bits | self.ENABLE))
+        self.port.write.byte(self.I2C_ADDR, (bits | self.ENABLE))
 
         sleep(self.E_PULSE)
 
-        self.port.write_byte(self.I2C_ADDR,(bits & ~self.ENABLE))
+        self.port.write_byte(self.I2C_ADDR,(bits & self.ENABLE))
 
         sleep(self.E_DELAY)
 
 
 
-    def message(self, string, line = 1):
+    def message(self, text):
 
-        # display message string on LCD line 1 or 2
+    # Send string to display
 
-        lcd_line = self.LCD_LINE_1
+        for char in text:
+
+            if char == '\n':
+
+                self.lcd_byte(0xC0, self.LCD_C)  # next line
+
+            else:
+
+                self.lcd_byte(ord(char), self.LCD_CHR)
 
 
-
-        string = string.ljust(self.LCD_WIDTH," ")
-
-
-
-        self.port.write_bytes(lcd_line, self.LCD_CMD)
-
-
-
-        for i in range(self.LCD_WIDTH):
-
-            self.port.write_bytes(ord(string[i]), self.LCD_CHR)
 
 
 
