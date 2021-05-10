@@ -1,3 +1,5 @@
+
+
 class hcsr04:
     
     @c_native("HCRS04_readDistanceRaw", ["hcsr04.c"], [])
@@ -19,13 +21,14 @@ class hcsr04:
         
         pinMode(self.trigger, OUTPUT)
         pinMode(self.echo, INPUT)
-
+"""
     def checkDelays(memorizedAlarm,alarmsList,alarm):
         #TODO: Check how to get the information about the checkDelay
+        delayDetected = False
         while alarm.is_set():
             if delayDetected:
                 alarm.clear()
                 newAlarm = MemorizedAlarm(memorizedAlarm.hour,memorizedAlarm.minute + 5, memorizedAlarm.color, memorizedAlarm.song)
                 newAlarm.isDelayed = True
-                alarmsList.append(newAlarm)
+                alarmsList.append(newAlarm)"""
         

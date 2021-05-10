@@ -5,8 +5,12 @@ from src.libraries import Leds
 from src.libraries import BuzzControls
 from src.libraries import DigitalTemperature
 from src.libraries import hcsr04
+from src.libraries import lcd
 import threading
 
+disp = lcd.lcd(i2cport = I2C1)
+
+"""
 button = D5
 pinMode(button,INPUT_PULLDOWN)
 
@@ -30,7 +34,7 @@ alarmList = [MemorizedAlarm(16,37,"magenta",3),MemorizedAlarm(10,43,"blue",2)]
 alarm = threading.Event()
 
 def setAlarmOff():
-    """clears the alarm,resets every component involved in it"""
+    clears the alarm,resets every component involved in it
     
     if alarm.is_set:
         alarm.clear()
@@ -51,8 +55,9 @@ while False:
     print("Distance: %.2f" % cm)
     
     sleep(1000)
-    
+"""  
 while True:
-    print("%02d:%02d:%02d - %02d/%02d/%d - %d"%RTC.ds.get_time())
-    DigitalTemperature.read()
-    sleep(1000)
+    disp.clear()
+    disp.message("%02d:%02d:%02d"%RTC.ds.get_time())
+    disp.message("%d Celsius"%DigitalTemperature.read(),line = 2)
+    sleep(500)

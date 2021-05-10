@@ -2,6 +2,7 @@ import threading
 from maxim.ds1307 import ds1307
 from src.libraries import Leds
 from src.libraries import BuzzControls
+from src.libraries import hcsr04
 
 ds=ds1307.DS1307(I2C0)
 ds.start()
