@@ -29,6 +29,21 @@ def watchForAlarms(alarmsList, alarm):
         sleep(1000)
         
 
+def checkDelays(memorizedAlarm,alarmsList,alarm):
+        #TODO: Check how to get the information about the checkDelay
+        delayDetected = False
+        while alarm.is_set():
+            if delayDetected:
+                alarm.clear()
+                newAlarm = MemorizedAlarm(memorizedAlarm.hour,memorizedAlarm.minute + 5, memorizedAlarm.color, memorizedAlarm.song)
+                newAlarm.isDelayed = True
+                alarmsList.append(newAlarm)
+        
+def delayDetected(distanceCM):
+    if hcsr04.getDistanceCM < distanceCM:
+        return true
+        else return false
+        
 def printOnLCD():
     "TODO: LCD function that prints everything we need on the LCD"
     
