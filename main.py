@@ -7,6 +7,7 @@ from src.libraries import DigitalTemperature
 from src.libraries import hcsr04
 from src.libraries import lcd
 import threading
+from src.libraries import MemorizedAlarm
 
 disp = lcd.lcd(i2cport = I2C1)
 
@@ -14,22 +15,10 @@ disp = lcd.lcd(i2cport = I2C1)
 button = D5
 pinMode(button,INPUT_PULLDOWN)
 
-class MemorizedAlarm:
-    def __init__(self,hour,minute,color,song):
-        self.hour = hour
-        self.minute = minute
-        self.color = color
-        self.song = song
-        self.isDelayed = False
-        
-    def setSong(self,song):
-        self.song = song
-        
-    def setColor(self,color):
-        self.color = color
+
         
 #TODO: retrieve memorizedAlarms from MQTT server
-alarmList = [MemorizedAlarm(16,37,"magenta",3),MemorizedAlarm(10,37,"blue",2)]
+alarmList = [MemorizedAlarm.MemorizedAlarm(17,31,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,37,"blue",2)]
 
 alarm = threading.Event()
 
