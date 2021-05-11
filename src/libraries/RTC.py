@@ -17,7 +17,7 @@ def watchForAlarms(alarmsList, alarm):
                 if not alarm.is_set():
                     alarm.set()
                     #Add the threads to set the LED and the Buzzer properly based on the chosen alarmTime and to check if the user wants a snooze.
-                    thread(hcsr04.checkDelays,memorizedAlarm,alarmsList,alarm)
+                    #thread(hcsr04.checkDelays,memorizedAlarm,alarmsList,alarm)
                     thread(Leds.setAlarmColor,memorizedAlarm.color,alarm)
                     thread(BuzzControls.sing,memorizedAlarm.song,alarm)
                     #Removes the delayedAlarm when the alarm clears.

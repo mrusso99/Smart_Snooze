@@ -10,7 +10,7 @@ import threading
 
 disp = lcd.lcd(i2cport = I2C1)
 
-"""
+
 button = D5
 pinMode(button,INPUT_PULLDOWN)
 
@@ -29,12 +29,12 @@ class MemorizedAlarm:
         self.color = color
         
 #TODO: retrieve memorizedAlarms from MQTT server
-alarmList = [MemorizedAlarm(16,37,"magenta",3),MemorizedAlarm(10,43,"blue",2)]
+alarmList = [MemorizedAlarm(16,37,"magenta",3),MemorizedAlarm(10,37,"blue",2)]
 
 alarm = threading.Event()
 
 def setAlarmOff():
-    clears the alarm,resets every component involved in it
+    """clears the alarm,resets every component involved in it"""
     
     if alarm.is_set:
         alarm.clear()
@@ -55,7 +55,7 @@ while False:
     print("Distance: %.2f" % cm)
     
     sleep(1000)
-"""  
+
 while True:
     disp.clear()
     disp.message("%02d:%02d:%02d"%RTC.ds.get_time())

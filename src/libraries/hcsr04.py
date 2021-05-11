@@ -21,6 +21,7 @@ class hcsr04:
         
         pinMode(self.trigger, OUTPUT)
         pinMode(self.echo, INPUT)
+        
 """
     def checkDelays(memorizedAlarm,alarmsList,alarm):
         #TODO: Check how to get the information about the checkDelay
