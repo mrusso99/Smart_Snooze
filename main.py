@@ -8,6 +8,11 @@ from src.libraries import hcsr04
 from src.libraries import lcd
 import threading
 from src.libraries import MemorizedAlarm
+import internet
+
+
+internet.internet.connect()
+
 
 disp = lcd.lcd(i2cport = I2C1)
 
