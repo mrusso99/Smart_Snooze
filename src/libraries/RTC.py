@@ -35,11 +35,13 @@ def watchForAlarms(alarmsList, alarm):
 def checkDelays(memorizedAlarm,alarmsList,alarm):
         #TODO: Check how to get the information about the checkDelay
         while alarm.is_set():
-            if delayDetected(50):
-                alarm.clear()
-                newAlarm = MemorizedAlarm.MemorizedAlarm(memorizedAlarm.hour,memorizedAlarm.minute + 5, memorizedAlarm.color, memorizedAlarm.song)
+            if delayDetected(10):
+                
+                newAlarm = MemorizedAlarm.MemorizedAlarm(memorizedAlarm.hour,memorizedAlarm.minute + 1, memorizedAlarm.color, memorizedAlarm.song)
                 newAlarm.isDelayed = True
+                alarm.clear()
                 alarmsList.append(newAlarm)
+                print(newAlarm.hour, newAlarm.minute)
 
 def delayDetected(distanceCM):
     print(prox.getDistanceCM())

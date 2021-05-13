@@ -18,7 +18,7 @@ pinMode(button,INPUT_PULLDOWN)
 
         
 #TODO: retrieve memorizedAlarms from MQTT server
-alarmList = [MemorizedAlarm.MemorizedAlarm(17,31,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,37,"blue",2)]
+alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,37,"blue",2)]
 
 alarm = threading.Event()
 

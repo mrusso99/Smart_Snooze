@@ -2,7 +2,6 @@ import streams
 import pwm
 
 #create a serial port stream with default parameters
-streams.serial()
 
 # the pin where the buzzer is attached to
 buzzerpin = D19.PWM
@@ -36,7 +35,6 @@ def sing(melody,alarm):
     while alarm.is_set():
         frequency = song[note]
         period=1000000//frequency #we are using MICROS so every sec is 1000000 of micros. // is the int division, pwm.write period doesn't accept floats
-        print("frequency is", frequency,"Hz")
         #set the period of the buzzer and the duty to 50% of the period
         pwm.write(buzzerpin,period,period//2,MICROS)
         note = (note+1)%len(song)
