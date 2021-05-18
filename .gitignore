@@ -2,3 +2,4 @@ build/*
 cache/*
 /zdevice.json
 /internet.py
+/dcz.yml
