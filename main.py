@@ -8,8 +8,10 @@ from src.libraries import hcsr04
 from src.libraries import lcd
 import threading
 from src.libraries import MemorizedAlarm
+from zdm import zdm
 import internet
 from zdm import zdm
+
 
 internet.internet.connect()
 
@@ -20,6 +22,36 @@ agent.connect()
 
 
 
+#TODO: retrieve memorizedAlarms from MQTT server
+alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
+
+def insertAlarm(hour,minute,color = "white",song = 3):
+    newAlarm = MemorizedAlarm.MemorizedAlarm(hour,minute,color,song)
+    alarmList.append(newAlarm)
+
+def deleteAlarm(hour,minute):
+    for alarm in alarmList:
+        if (alarm.hour == hour and alarm.minute == minute):
+            alarmList.remove(alarm)
+
+dict = {
+    "readTemp" : DigitalTemperature.read,
+    "readTime" : RTC.ds.get_time,
+    "insertAlarm" : insertAlarm,
+    "deleteAlarm" : deleteAlarm
+}
+
+tags = ["temperatura"]
+
+device = zdm.Device() # just start it 
+device.connect() 
+while True: # use the agent to publish values to the ZDM
+# Just open the device page from VSCode and check that data is incoming
+    v = random(0,100)
+    device.publish({"value":v}, "test")
+    print("Published",v) 
+    sleep(5000) # The agent automatically handles connections and reconnections 
+
 disp = lcd.lcd(i2cport = I2C1)
 
 
@@ -27,6 +59,7 @@ button = D5
 pinMode(button,INPUT_PULLDOWN)
 
 
+<<<<<<< Updated upstream
 
 
 
@@ -34,6 +67,8 @@ pinMode(button,INPUT_PULLDOWN)
         
 #TODO: retrieve memorizedAlarms from MQTT server
 alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,37,"blue",2)]
+=======
+>>>>>>> Stashed changes
 
 alarm = threading.Event()
 
