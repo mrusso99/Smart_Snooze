@@ -1,5 +1,5 @@
 class MemorizedAlarm:
-    def __init__(self,hour,minute,color,song):
+    def __init__(self,hour,minute,color = "blue",song = 3):
         self.hour = hour
         self.minute = minute
         self.color = color

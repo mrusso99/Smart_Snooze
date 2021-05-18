@@ -20,14 +20,9 @@ def insertAlarm(device, arg):
     print(arg)
     hour=0 
     minute=0
-    if "hour" in arg:
-        hour=arg['hour']
-        print(hour)
-    if "minute" in arg:
-        minute=arg['minute']
-        print(minute)
-    newAlarm = MemorizedAlarm.MemorizedAlarm(hour,minute)
-    alarmList.append(newAlarm)
+    if "hour" in arg and "minute" in arg:
+        newAlarm = MemorizedAlarm.MemorizedAlarm(arg["hour"],arg["minute"])
+        alarmList.append(newAlarm)
     print("New alarm inserted,", arg)
 
 def deleteAlarm(device,arg):
