@@ -12,6 +12,30 @@ from zdm import zdm
 import internet
 from zdm import zdm
 
+alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
+alarm = threading.Event()
+
+
+def insertAlarm(device, arg):
+    print(arg)
+    hour=0 
+    minute=0
+    if "hour" in arg:
+        hour=arg['hour']
+        print(hour)
+    if "minute" in arg:
+        minute=arg['minute']
+        print(minute)
+    newAlarm = MemorizedAlarm.MemorizedAlarm(hour,minute)
+    alarmList.append(newAlarm)
+    print("New alarm inserted,", arg)
+
+def deleteAlarm(device,arg):
+    print(arg)
+#    for alarm in alarmList:
+   #     if (alarm.hour == hour and alarm.minute == minute):
+    #        alarmList.remove(alarm)
+
 dict = {
     "readTemp" : DigitalTemperature.read,
     "readTime" : RTC.ds.get_time,
@@ -22,30 +46,15 @@ tags = ["temperatura"]
 
 internet.internet.connect()
 
-agent = zdm.Device(jobs_dict = dict,condition_tags = tags)
+device = zdm.Device(jobs_dict = dict,condition_tags = tags)
     # just start it
-agent.connect()
+device.connect()
 
 #TODO: retrieve memorizedAlarms from MQTT server
-alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
 
-def insertAlarm(hour,minute,color = "white",song = 3):
-    newAlarm = MemorizedAlarm.MemorizedAlarm(hour,minute,color,song)
-    alarmList.append(newAlarm)
 
-def deleteAlarm(hour,minute):
-    for alarm in alarmList:
-        if (alarm.hour == hour and alarm.minute == minute):
-            alarmList.remove(alarm)
 
-device = zdm.Device() # just start it 
-device.connect() 
-while True: # use the agent to publish values to the ZDM
-# Just open the device page from VSCode and check that data is incoming
-    v = random(0,100)
-    device.publish({"value":v}, "test")
-    print("Published",v) 
-    sleep(5000) # The agent automatically handles connections and reconnections 
+
 
 disp = lcd.lcd(i2cport = I2C1)
 
@@ -58,9 +67,6 @@ pinMode(button,INPUT_PULLDOWN)
 
         
 #TODO: retrieve memorizedAlarms from MQTT server
-alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,37,"blue",2)]
-
-alarm = threading.Event()
 
 def setAlarmOff():
     """clears the alarm,resets every component involved in it"""
@@ -90,7 +96,7 @@ while True:
     disp.message("%02d:%02d:%02d"%RTC.ds.get_time())
     temp=DigitalTemperature.read()
     disp.message("%d Celsius"%DigitalTemperature.read(),line = 2)
-    agent.publish({"temperatura":temp}, "temperatura")
+    device.publish({"temperatura":temp}, "temperatura")
     sleep(5000)
 
 
