@@ -12,15 +12,19 @@ from zdm import zdm
 import internet
 from zdm import zdm
 
+dict = {
+    "readTemp" : DigitalTemperature.read,
+    "readTime" : RTC.ds.get_time,
+    "insertAlarm" : insertAlarm,
+    "deleteAlarm" : deleteAlarm
+}
+tags = ["temperatura"]
 
 internet.internet.connect()
 
-agent = zdm.Device()
+agent = zdm.Device(jobs_dict = dict,condition_tags = tags)
     # just start it
 agent.connect()
-
-
-
 
 #TODO: retrieve memorizedAlarms from MQTT server
 alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
@@ -33,15 +37,6 @@ def deleteAlarm(hour,minute):
     for alarm in alarmList:
         if (alarm.hour == hour and alarm.minute == minute):
             alarmList.remove(alarm)
-
-dict = {
-    "readTemp" : DigitalTemperature.read,
-    "readTime" : RTC.ds.get_time,
-    "insertAlarm" : insertAlarm,
-    "deleteAlarm" : deleteAlarm
-}
-
-tags = ["temperatura"]
 
 device = zdm.Device() # just start it 
 device.connect() 
@@ -59,16 +54,11 @@ button = D5
 pinMode(button,INPUT_PULLDOWN)
 
 
-<<<<<<< Updated upstream
-
-
 
 
         
 #TODO: retrieve memorizedAlarms from MQTT server
 alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,37,"blue",2)]
-=======
->>>>>>> Stashed changes
 
 alarm = threading.Event()
 
