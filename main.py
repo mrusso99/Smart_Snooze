@@ -11,31 +11,60 @@ from src.libraries import MemorizedAlarm
 from zdm import zdm
 import internet
 from zdm import zdm
+import ntpclient
 
 alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
 alarm = threading.Event()
 
 
 def insertAlarm(device, arg):
-    print(arg)
-    hour=0 
-    minute=0
+    color="blue"
+    song=3 
     if "hour" in arg and "minute" in arg:
-        newAlarm = MemorizedAlarm.MemorizedAlarm(arg["hour"],arg["minute"])
+        if "song" in arg:
+            song=arg["song"]
+        if "color" in arg:
+            color=arg["color"]
+        newAlarm = MemorizedAlarm.MemorizedAlarm(arg["hour"],arg["minute"],color,song)
         alarmList.append(newAlarm)
-    print("New alarm inserted,", arg)
-
+        return{"res":"New alarm inserted"}
+        print("New alarm inserted,", arg)
+    else:
+        return {"err":"Wrong payload format"}
+        print("Wrong payload,", arg)
+        
 def deleteAlarm(device,arg):
-    print(arg)
-#    for alarm in alarmList:
-   #     if (alarm.hour == hour and alarm.minute == minute):
-    #        alarmList.remove(alarm)
-
+    if "hour" in arg and "minute" in arg:
+        hour=arg["hour"]
+        minute=arg["minute"]
+        trovato=False
+        for alarm in alarmList:
+            if alarm.hour==hour and alarm.minute==minute:
+                alarmList.remove(alarm)
+                print("Alarm deleted,", arg)
+                trovato=True 
+        if not trovato:
+            print("Error 404: Alarm not found")
+            return{"err":"Error 404: Alarm not found"}
+        else:
+            return{"res":"Alarm deleted"}
+    else:
+        print("Wrong payload,", arg)
+        return{"err":"Wrong payload format"}
+        
+def setTime(device, arg):
+    
+    if "hour" in arg and "minutes" in arg and "seconds" and "day" in arg and "month" in arg and "year" in arg and "day_of_week" in arg:
+        print("formato corretto")
+        RTC.ds.set_time(arg["hours"],arg["minutes"],arg["seconds"],arg["day"],arg["month"],arg["year"],arg["day_of_week"])
+    
+        
 dict = {
     "readTemp" : DigitalTemperature.read,
     "readTime" : RTC.ds.get_time,
     "insertAlarm" : insertAlarm,
-    "deleteAlarm" : deleteAlarm
+    "deleteAlarm" : deleteAlarm,
+    "setTime": setTime
 }
 tags = ["temperatura"]
 

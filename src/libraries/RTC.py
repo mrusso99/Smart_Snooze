@@ -44,7 +44,6 @@ def checkDelays(memorizedAlarm,alarmsList,alarm):
                 print(newAlarm.hour, newAlarm.minute)
 
 def delayDetected(distanceCM):
-    print(prox.getDistanceCM())
     if prox.getDistanceCM() < distanceCM:
         return True
 
