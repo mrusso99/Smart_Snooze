@@ -11,8 +11,8 @@ from src.libraries import MemorizedAlarm
 from zdm import zdm
 import internet
 from zdm import zdm
-import datetime
-import re
+
+
 
 alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
 alarm = threading.Event()
@@ -21,8 +21,14 @@ alarm = threading.Event()
 
 def on_timestamp(device, timestamp):
     print("RCV time:",timestamp) 
-    
-    return timest
+    iso_date=timestamp["rfc3339"]
+    year=iso_date[0:4]
+    month=iso_date[5:7]
+    day=iso_date[8:10]
+    hour=iso_date[11:13]
+    minute=iso_date[14:16]
+    second=iso_date[17:19]
+    RTC.ds.set_time(int(hour),int(minute),int(second),int(day),int(month),int(year),1)
 
 
 def insertAlarm(device, arg):
@@ -101,7 +107,7 @@ def setAlarmOff():
         Leds.reset()
         BuzzControls.reset()
         
-
+device.request_timestamp()
 #Whenever the button is pressed, clear the alarm:
 onPinRise(button,setAlarmOff)
 thread(RTC.watchForAlarms,alarmList,alarm)
@@ -117,7 +123,7 @@ def onChangePublish():
 
 thread(onChangePublish)
 
-utc_timestamp=device.request_timestamp()
+
 
 
 
