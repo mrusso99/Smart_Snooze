@@ -11,10 +11,18 @@ from src.libraries import MemorizedAlarm
 from zdm import zdm
 import internet
 from zdm import zdm
-import ntpclient
+import datetime
+import re
 
 alarmList = [MemorizedAlarm.MemorizedAlarm(3,16,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
 alarm = threading.Event()
+
+
+
+def on_timestamp(device, timestamp):
+    print("RCV time:",timestamp) 
+    
+    return timest
 
 
 def insertAlarm(device, arg):
@@ -70,7 +78,7 @@ tags = ["temperatura"]
 
 internet.internet.connect()
 
-device = zdm.Device(jobs_dict = dict,condition_tags = tags)
+device = zdm.Device(jobs_dict = dict,condition_tags = tags, on_timestamp=on_timestamp)
     # just start it
 device.connect()
 
@@ -106,21 +114,22 @@ onPinRise(button,setAlarmOff)
 thread(RTC.watchForAlarms,alarmList,alarm)
 # loop forever
 
-sens = hcsr04.hcsr04(D23, D22)
 
-while False:
-    cm = sens.getDistanceCM()
-    
-    print("Distance: %.2f" % cm)
-    
-    sleep(1000)
+
+utc_timestamp=device.request_timestamp()
+
+
+
+
+
 
 while True:
     disp.clear()
     disp.message("%02d:%02d:%02d"%RTC.ds.get_time())
     temp=DigitalTemperature.read()
     disp.message("%d Celsius"%DigitalTemperature.read(),line = 2)
-    device.publish({"temperatura":temp}, "temperatura")
+    payload={"temperatura":temp}
+    device.publish(payload, tags[0])
     sleep(5000)
 
 
