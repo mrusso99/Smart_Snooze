@@ -74,7 +74,8 @@ dict = {
     "deleteAlarm" : deleteAlarm,
     "setTime": setTime
 }
-tags = ["temperatura"]
+
+tags = ["temperatura","alarm"]
 
 internet.internet.connect()
 
@@ -82,20 +83,12 @@ device = zdm.Device(jobs_dict = dict,condition_tags = tags, on_timestamp=on_time
     # just start it
 device.connect()
 
-#TODO: retrieve memorizedAlarms from MQTT server
-
-
-
-
 
 disp = lcd.lcd(i2cport = I2C1)
 
 
 button = D5
 pinMode(button,INPUT_PULLDOWN)
-
-
-
 
         
 #TODO: retrieve memorizedAlarms from MQTT server
@@ -108,18 +101,23 @@ def setAlarmOff():
         Leds.reset()
         BuzzControls.reset()
         
-        
+
 #Whenever the button is pressed, clear the alarm:
 onPinRise(button,setAlarmOff)
 thread(RTC.watchForAlarms,alarmList,alarm)
-# loop forever
 
 
+def onChangePublish():
+    while True:
+        old=alarmList
+        sleep(60000)
+        for alarm in alarmList:
+            if alarm not in old:
+                device.publish({"Alarm":alarm}, tags[1])
+
+thread(onChangePublish)
 
 utc_timestamp=device.request_timestamp()
-
-
-
 
 
 

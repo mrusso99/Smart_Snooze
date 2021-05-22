@@ -7,7 +7,7 @@ class MemorizedAlarm:
             self.color = "blue"
         else:
             self.color=color
-        if song in range(0,3):
+        if song in range(1,4):
             self.song = song
         else:
             print("song not found, fallback to 3")
