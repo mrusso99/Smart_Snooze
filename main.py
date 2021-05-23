@@ -16,7 +16,7 @@ from zdm import zdm
 lock_on_RTC= threading.Lock()
 lock_on_temp= threading.Lock()
 
-alarmList = [MemorizedAlarm.MemorizedAlarm(16,0,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
+alarmList = [MemorizedAlarm.MemorizedAlarm(17,20,"magenta",3),MemorizedAlarm.MemorizedAlarm(10,39,"blue",2)]
 alarm = threading.Event()
 
 
@@ -48,7 +48,7 @@ def insertAlarm(device, arg):
             color=arg["color"]
         newAlarm = MemorizedAlarm.MemorizedAlarm(arg["hour"],arg["minute"],color,song)
         alarmList.append(newAlarm)
-        return{"res":"New alarm inserted"}
+        """return{"res":"New alarm inserted"}"""
         print("New alarm inserted,", arg)
     else:
         return {"err":"Wrong payload format"}
@@ -142,11 +142,11 @@ button = D5
 pinMode(button,INPUT_PULLDOWN)
 
         
-#TODO: retrieve memorizedAlarms from MQTT server
+
 
 def setAlarmOff():
     """clears the alarm,resets every component involved in it"""
-    
+
     if alarm.is_set():
         alarm.clear()
         Leds.reset()

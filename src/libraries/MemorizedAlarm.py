@@ -15,7 +15,7 @@ class MemorizedAlarm:
         self.isDelayed = False
         
     def setSong(self,song):
-        self.song = song
+            self.song = song
         
     def setColor(self,color):
         self.color = color

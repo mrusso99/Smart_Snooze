@@ -22,26 +22,21 @@ def watchForAlarms(alarmsList, alarm, lock_on_RTC):
         lock_on_RTC.release()
         print("lock released")
         for memorizedAlarm in alarmsList:
-            print("Entro nel for")
             if currentTime[0] == memorizedAlarm.hour and currentTime[1] == memorizedAlarm.minute:
-                    print("Condizione verificata")
+                if not alarm.is_set():
+                    alarm.set()
                     #Add the threads to set the LED and the Buzzer properly based on the chosen alarmTime and to check if the user wants a snooze.
                     #thread(hcsr04.checkDelays,memorizedAlarm,alarmsList,alarm)
- 
                     thread(Leds.setAlarmColor,memorizedAlarm.color,alarm)
                     print("thread1")
                     thread(BuzzControls.sing,memorizedAlarm.song,alarm)
-                    print("thread2")
                     #Removes the delayedAlarm when the alarm clears.
                     thread(checkDelays,memorizedAlarm,alarmsList,alarm)
                     print("thread3")
                     if memorizedAlarm.isDelayed:
-                        print("condizione 2")
                         while alarm.is_set():
-                            print("dentro il while")
                             sleep(1000)
                         alarmsList.remove(memorizedAlarm)
-                        print("allarme rimosso")
                     sleep(60000)
         sleep(1000)
         
