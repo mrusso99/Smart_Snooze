@@ -109,7 +109,7 @@ pinMode(button,INPUT_PULLDOWN)
 """thread(sendTempToZDM,device)"""
 
 
-alarmList = [MemorizedAlarm.MemorizedAlarm(19,53,"magenta",3),MemorizedAlarm.MemorizedAlarm(19,54,"blue",2),MemorizedAlarm.MemorizedAlarm(19,55,"blue",2),]
+alarmList = [MemorizedAlarm.MemorizedAlarm(20,56,"magenta",3),MemorizedAlarm.MemorizedAlarm(19,54,"blue",2),MemorizedAlarm.MemorizedAlarm(19,55,"blue",2),]
 
 alarm = threading.Event()
 
@@ -127,14 +127,26 @@ thread(RTC.watchForAlarms,alarmList,alarm)
 # loop forever
 
 
+time = RTC.ds.get_time()
+oldHour = time[0]
+oldMinute = time[1]
+disp.clear()
+disp.message("%02d:%02d"%time)
+temperatura = DigitalTemperature.read()
+disp.message("%d Celsius"%temperatura,line=2)
+
 
 while True:
-    disp.clear()
-    disp.message("%02d:%02d"%RTC.ds.get_time())
-    temperatura = DigitalTemperature.read()
-    disp.message("%d Celsius"%temperatura,line=2)
-    payload={"temperatura":temperatura}
-    """device.publish(payload, "temperature")"""
-    sleep(30000)
+    time = RTC.ds.get_time()
+    if oldHour != time[0] or oldMinute != time[1]:
+        disp.clear()
+        disp.message("%02d:%02d"%time)
+        temperatura = DigitalTemperature.read()
+        disp.message("%d Celsius"%temperatura,line=2)
+        payload={"temperatura":temperatura}
+        """device.publish(payload, "temperature")"""
+    oldHour = time[0]
+    oldMinute = time[1]
+    sleep(1000)
 
 
