@@ -24,13 +24,11 @@ note = 0
 
 def reset():
     """Stops the buzzer from playing"""
-    
     pwm.write(buzzerpin,0,0)
     note = 0
 
 def sing(melody,alarm):
     """Reproduces the chosen song while an alarm is set"""
-    
     song = sequences[melody]
     while alarm.is_set():
         frequency = song[note]
