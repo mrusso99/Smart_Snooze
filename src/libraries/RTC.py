@@ -19,16 +19,16 @@ def watchForAlarms(alarmsList, alarm):
                 if not alarm.is_set() and not memorizedAlarm.alreadyRang:
                     print("setto l'allarme")
                     alarm.set()
+                    #Removes the delayedAlarm from AlarmList in order to not memorize it
+                    if memorizedAlarm.isDelayed:
+                        alarmsList.remove(memorizedAlarm)
+                    thread(checkDelays,memorizedAlarm,alarmsList,alarm)
                     memorizedAlarm.alreadyRang = True
                     print("allarme settato")
                     Leds.color_selector(memorizedAlarm.color)
                     print("ho settato i led")
                     BuzzControls.sing(memorizedAlarm.song,alarm)
                     Leds.reset()
-                    if memorizedAlarm.isDelayed:
-                        alarmsList.remove(memorizedAlarm)
-                    thread(checkDelays,memorizedAlarm,alarmsList,alarm)
-                    #Removes the delayedAlarm when the alarm clears.
                     print("Sono alla fine!!!!")
             if currentTime[0] == (memorizedAlarm.hour + 1)%24:
                     memorizedAlarm.alreadyRang = False
@@ -38,11 +38,12 @@ def watchForAlarms(alarmsList, alarm):
 def checkDelays(memorizedAlarm,alarmsList,alarm):
         """"Checks if the user delays the alarm and sets the new alarm"""
         delayAmount = 1
+        print(alarmsList)
         while alarm.is_set():
-            if delayDetected(10):
+            if delayDetected(50):
                 newMinute = (memorizedAlarm.minute + delayAmount)%60
                 newHour = memorizedAlarm.hour
-                if (memorizedAlarm.minute > newMinute)
+                if (memorizedAlarm.minute > newMinute):
                     newHour = (memorizedAlarm.hour + 1)%24
                 newAlarm = MemorizedAlarm.MemorizedAlarm(newHour,newMinute, memorizedAlarm.color, memorizedAlarm.song)
                 newAlarm.isDelayed = True
