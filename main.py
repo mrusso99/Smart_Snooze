@@ -89,7 +89,7 @@ def editAlarm(device,arg):
 
 def changeDistancePostponement(device, arg):
     if "distance" in arg:
-        if arg["distance"] > 100 and arg["distance"]< 10:
+        if arg["distance"] > 100 or arg["distance"]< 10:
             return{"err": "Distance not allowed, pick a value between 10 and 100"}
             print("Distance not allowed, pick value between 10 and 100")
         else:
@@ -101,7 +101,7 @@ def changeDistancePostponement(device, arg):
         
 def changeMinsPostponement(device, arg):
     if "minutes" in arg:
-        if arg["minutes"] > 30 and arg["minutes"]<= 0:
+        if arg["minutes"] > 30 or arg["minutes"]<= 0:
             return{"err": "Error, pick a value under 30 minutes and greater than 0"}
             print("Error, pick a value under 30 minutes and greater than 0")
         else:
@@ -174,10 +174,9 @@ while True:
         disp.message("%02d:%02d"%time)
         temperatura = DigitalTemperature.read()
         disp.message("%d Celsius"%temperatura,line=2)
-        payload={"temperatura":temperatura}
-        device.publish(payload, "temperatura")
+        if not alarm.is_set():
+            payload={"temperatura":temperatura}
+            device.publish(payload, "temperatura")
     oldHour = time[0]
     oldMinute = time[1]
     sleep(1000)
-
-
