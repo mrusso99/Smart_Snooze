@@ -16,24 +16,23 @@ def watchForAlarms(alarmsList, alarm):
         currentTime = ds.get_time()
         for memorizedAlarm in alarmsList:
             if currentTime[0] == memorizedAlarm.hour and currentTime[1] == memorizedAlarm.minute:
-                print("ora e minuti corrispondenti a un allarme")
-                if not alarm.is_set():
+                if not alarm.is_set() and not memorizedAlarm.alreadyRang:
                     print("setto l'allarme")
-                    #alarm.set()
-                    #Add the threads to set the LED and the Buzzer properly based on the chosen alarmTime and to check if the user wants a snooze.
-                    #thread(hcsr04.checkDelays,memorizedAlarm,alarmsList,alarm)
-                    #thread(BuzzControls.sing,memorizedAlarm.song,alarm)
-                    print("ho settato i buzzer")
-                    #thread(Leds.setAlarmColor,memorizedAlarm.color,alarm)
+                    alarm.set()
+                    memorizedAlarm.alreadyRang = True
+                    print("allarme settato")
+                    Leds.color_selector(memorizedAlarm.color)
                     print("ho settato i led")
+                    BuzzControls.sing(memorizedAlarm.song,alarm)
+                    Leds.reset()
+                     #Add the threads to set the LED and the Buzzer properly based on the chosen alarmTime and to check if the user wants a snooze.
+                    thread(checkDelays,memorizedAlarm,alarmsList,alarm)
                     #Removes the delayedAlarm when the alarm clears.
-                    #thread(checkDelays,memorizedAlarm,alarmsList,alarm)
                     if memorizedAlarm.isDelayed:
-                        while alarm.is_set():
-                            sleep(1000)
                         alarmsList.remove(memorizedAlarm)
                     print("Sono alla fine!!!!")
-                sleep(60000)
+            if currentTime[0] == (memorizedAlarm.hour + 1)%24:
+                    memorizedAlarm.alreadyRang = False
         sleep(1000)
         
 

@@ -99,26 +99,18 @@ disp = lcd.lcd(i2cport = I2C1)
 button = D5
 pinMode(button,INPUT_PULLDOWN)
 
-"""def sendTempToZDM(device):
-    while True:    
-        temp=DigitalTemperature.read()
-        payload={"temperatura":temp}
-        device.publish(payload, "temperature")
-        sleep(5000)"""
-
-"""thread(sendTempToZDM,device)"""
-
-
-alarmList = [MemorizedAlarm.MemorizedAlarm(20,56,"magenta",3),MemorizedAlarm.MemorizedAlarm(19,54,"blue",2),MemorizedAlarm.MemorizedAlarm(19,55,"blue",2),]
+alarmList = [MemorizedAlarm.MemorizedAlarm(8,31,"magenta",3),MemorizedAlarm.MemorizedAlarm(8,30,"blue",2),MemorizedAlarm.MemorizedAlarm(19,55,"blue",2),]
 
 alarm = threading.Event()
 
 def setAlarmOff():
     """clears the alarm,resets every component involved in it"""
     if alarm.is_set():
+        print("comincio ad annullare l'allarme..")
         alarm.clear()
         Leds.reset()
         BuzzControls.reset()
+        print("allarme annullato")
         
         
 #Whenever the button is pressed, clear the alarm:
@@ -144,7 +136,7 @@ while True:
         temperatura = DigitalTemperature.read()
         disp.message("%d Celsius"%temperatura,line=2)
         payload={"temperatura":temperatura}
-        """device.publish(payload, "temperature")"""
+        device.publish(payload, "temperatura")
     oldHour = time[0]
     oldMinute = time[1]
     sleep(1000)

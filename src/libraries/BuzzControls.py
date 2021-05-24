@@ -29,6 +29,7 @@ def reset():
 
 def sing(melody,alarm):
     """Reproduces the chosen song while an alarm is set"""
+    print("ho settato i buzzer")
     song = sequences[melody]
     while alarm.is_set():
         frequency = song[note]

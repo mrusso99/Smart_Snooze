@@ -13,6 +13,7 @@ class MemorizedAlarm:
             print("song not found, fallback to 3")
             self.song=3
         self.isDelayed = False
+        self.alreadyRang = False
         
     def setSong(self,song):
             self.song = song
