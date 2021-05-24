@@ -25,6 +25,7 @@ def insertAlarm(device, arg):
         newAlarm = MemorizedAlarm.MemorizedAlarm(arg["hour"],arg["minute"],color,song)
         alarmList.append(newAlarm)
         print("New alarm inserted,", arg)
+        device.publish({"hour":newAlarm.hour,"minute":newAlarm.minute,"color":newAlarm.color,"song":newAlarm.song},"alarm")
         return{"res":"New alarm inserted"}
     else:
         print("Wrong payload,", arg)
@@ -41,6 +42,27 @@ def deleteAlarm(device,arg):
                 alarmList.remove(alarm)
                 print("Alarm deleted,", arg)
                 trovato=True 
+        if not trovato:
+            print("Error 404: Alarm not found")
+            return{"err":"Error 404: Alarm not found"}
+        else:
+            return{"res":"Alarm deleted"}
+    else:
+        print("Wrong payload,", arg)
+        return{"err":"Wrong payload format"}
+        
+def editAlarm(device,arg):
+    if "hour" in arg and "minute" in arg:
+        hour=arg["hour"]
+        minute=arg["minute"]
+        trovato=False
+        for alarm in alarmList:
+            if alarm.hour==hour and alarm.minute==minute:
+                trovato=True
+                if "color" in arg:
+                    alarm.setColor(arg["color"])
+                if "song" in arg:
+                    alarm.setSong(arg["song"])
         if not trovato:
             print("Error 404: Alarm not found")
             return{"err":"Error 404: Alarm not found"}
