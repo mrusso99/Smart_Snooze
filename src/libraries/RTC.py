@@ -25,11 +25,10 @@ def watchForAlarms(alarmsList, alarm):
                     print("ho settato i led")
                     BuzzControls.sing(memorizedAlarm.song,alarm)
                     Leds.reset()
-                     #Add the threads to set the LED and the Buzzer properly based on the chosen alarmTime and to check if the user wants a snooze.
-                    thread(checkDelays,memorizedAlarm,alarmsList,alarm)
-                    #Removes the delayedAlarm when the alarm clears.
                     if memorizedAlarm.isDelayed:
                         alarmsList.remove(memorizedAlarm)
+                    thread(checkDelays,memorizedAlarm,alarmsList,alarm)
+                    #Removes the delayedAlarm when the alarm clears.
                     print("Sono alla fine!!!!")
             if currentTime[0] == (memorizedAlarm.hour + 1)%24:
                     memorizedAlarm.alreadyRang = False
@@ -37,7 +36,7 @@ def watchForAlarms(alarmsList, alarm):
         
 
 def checkDelays(memorizedAlarm,alarmsList,alarm):
-        #TODO: Check how to get the information about the checkDelay
+        """"Checks if the user delays the alarm and sets the new alarm"""
         delayAmount = 1
         while alarm.is_set():
             if delayDetected(10):
