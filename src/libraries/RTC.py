@@ -38,10 +38,14 @@ def watchForAlarms(alarmsList, alarm):
 
 def checkDelays(memorizedAlarm,alarmsList,alarm):
         #TODO: Check how to get the information about the checkDelay
+        delayAmount = 1
         while alarm.is_set():
             if delayDetected(10):
-                
-                newAlarm = MemorizedAlarm.MemorizedAlarm(memorizedAlarm.hour,memorizedAlarm.minute + 1, memorizedAlarm.color, memorizedAlarm.song)
+                newMinute = (memorizedAlarm.minute + delayAmount)%60
+                newHour = memorizedAlarm.hour
+                if (memorizedAlarm.minute > newMinute)
+                    newHour = (memorizedAlarm.hour + 1)%24
+                newAlarm = MemorizedAlarm.MemorizedAlarm(newHour,newMinute, memorizedAlarm.color, memorizedAlarm.song)
                 newAlarm.isDelayed = True
                 alarm.clear()
                 alarmsList.append(newAlarm)
