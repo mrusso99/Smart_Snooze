@@ -12,7 +12,22 @@ import internet
 from zdm import zdm
 
 
+minsAndDistance=[1,50]
+
+
 internet.internet.connect()
+
+
+def on_timestamp(device, timestamp):
+    print("RCV time:",timestamp) 
+    iso_date=timestamp["rfc3339"]
+    year=iso_date[0:4]
+    month=iso_date[5:7]
+    day=iso_date[8:10]
+    hour=int(iso_date[11:13])+2
+    minute=iso_date[14:16]
+    second=iso_date[17:19]
+    RTC.ds.set_time(hour,int(minute),int(second),int(day),int(month),int(year),1)
 
 def insertAlarm(device, arg):
     color="blue"
@@ -78,10 +93,10 @@ def changeDistancePostponement(device, arg):
             return{"err": "Distance not allowed, pick a value between 10 and 100"}
             print("Distance not allowed, pick value between 10 and 100")
         else:
-            distanceCM=arg["distance"]
-            return{"res":"Distance changed, new value:" + distanceCM}
+            minsAndDistance[1]=arg["distance"]
+            return{"res":"Distance changed, new value"}
     else:
-
+        return{"err":"Wrong payload format"}
         print("Wrong payload format")
         
 def changeMinsPostponement(device, arg):
@@ -90,8 +105,8 @@ def changeMinsPostponement(device, arg):
             return{"err": "Error, pick a value under 30 minutes and greater than 0"}
             print("Error, pick a value under 30 minutes and greater than 0")
         else:
-            minsPostponement=arg["minutes"]
-            return{"res":"Value changed, new value:" + minsPostponement}
+            minsAndDistance[0]=arg["minutes"]
+            return{"res":"Value changed, new value"}
     else:
         return{"err":"Wrong payload format"}
         print("Wrong payload format")
@@ -101,6 +116,7 @@ dict = {
     "readTime" : RTC.ds.get_time,
     "insertAlarm" : insertAlarm,
     "deleteAlarm" : deleteAlarm,
+    "editAlarm": editAlarm,
     "changeDistancePostponement": changeDistancePostponement,
     "changeMinsPostponement": changeMinsPostponement
 }
@@ -109,11 +125,12 @@ tags = ["temperatura","alarm"]
 
 
 
-device = zdm.Device(jobs_dict = dict, condition_tags=tags)
-
+device = zdm.Device(jobs_dict = dict, condition_tags=tags, on_timestamp=on_timestamp)
 
     # just start it
 device.connect()
+
+device.request_timestamp()
 
 disp = lcd.lcd(i2cport = I2C1)
 
@@ -137,7 +154,7 @@ def setAlarmOff():
         
 #Whenever the button is pressed, clear the alarm:
 onPinRise(button,setAlarmOff)
-thread(RTC.watchForAlarms,alarmList,alarm)
+thread(RTC.watchForAlarms,alarmList,alarm,minsAndDistance)
 # loop forever
 
 
