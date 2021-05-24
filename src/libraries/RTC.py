@@ -38,7 +38,6 @@ def watchForAlarms(alarmsList, alarm):
 def checkDelays(memorizedAlarm,alarmsList,alarm):
         """"Checks if the user delays the alarm and sets the new alarm"""
         delayAmount = 1
-        print(alarmsList)
         while alarm.is_set():
             if delayDetected(50):
                 newMinute = (memorizedAlarm.minute + delayAmount)%60
@@ -54,11 +53,4 @@ def checkDelays(memorizedAlarm,alarmsList,alarm):
 def delayDetected(distanceCM):
     if prox.getDistanceCM() < distanceCM:
         return True
-
         
-def printOnLCD():
-    "TODO: LCD function that prints everything we need on the LCD"
-    
-    while True:
-        print("%02d:%02d:%02d - %02d/%02d/%d - %d"%ds.get_time())
-        sleep(1000)
