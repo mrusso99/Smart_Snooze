@@ -1,16 +1,15 @@
 import streams
-streams.serial()
-from src.libraries import RTC
-from src.libraries import Leds
-from src.libraries import BuzzControls
+from src.libraries import SnoozeManager
 from src.libraries import DigitalTemperature
-from src.libraries import hcsr04
 from src.libraries import lcd
+from src.libraries import LedControls
+from src.libraries import BuzzerControls
 import threading
 from src.libraries import MemorizedAlarm
 import internet
 from zdm import zdm
 
+streams.serial()
 
 minsAndDistance=[1,50]
 
@@ -27,7 +26,7 @@ def on_timestamp(device, timestamp):
     hour=int(iso_date[11:13])+2
     minute=iso_date[14:16]
     second=iso_date[17:19]
-    RTC.ds.set_time(hour,int(minute),int(second),int(day),int(month),int(year),1)
+    SnoozeManager.ds.set_time(hour,int(minute),int(second),int(day),int(month),int(year),1)
 
 def insertAlarm(device, arg):
     color="blue"
@@ -54,9 +53,11 @@ def deleteAlarm(device,arg):
         trovato=False
         for alarm in alarmList:
             if alarm.hour==hour and alarm.minute==minute:
+                trovato=True 
                 alarmList.remove(alarm)
                 print("Alarm deleted,", arg)
-                trovato=True 
+                payload = {"hour":alarm.hour,"minute":alarm.minute,"color":alarm.color,"song":alarm.song}
+                device.publish(payload,"deletedAlarm")
         if not trovato:
             print("Error 404: Alarm not found")
             return{"err":"Error 404: Alarm not found"}
@@ -74,10 +75,14 @@ def editAlarm(device,arg):
         for alarm in alarmList:
             if alarm.hour==hour and alarm.minute==minute:
                 trovato=True
+                payload = {"hour":alarm.hour,"minute":alarm.minute,"color":alarm.color,"song":alarm.song}
+                device.publish(payload,"deletedAlarm")
                 if "color" in arg:
                     alarm.setColor(arg["color"])
                 if "song" in arg:
                     alarm.setSong(arg["song"])
+                payload = {"hour":alarm.hour,"minute":alarm.minute,"color":alarm.color,"song":alarm.song}
+                device.publish(payload,"alarm")
         if not trovato:
             print("Error 404: Alarm not found")
             return{"err":"Error 404: Alarm not found"}
@@ -112,8 +117,6 @@ def changeMinsPostponement(device, arg):
         print("Wrong payload format")
     
 dict = {
-    "readTemp" : DigitalTemperature.read,
-    "readTime" : RTC.ds.get_time,
     "insertAlarm" : insertAlarm,
     "deleteAlarm" : deleteAlarm,
     "editAlarm": editAlarm,
@@ -145,20 +148,18 @@ alarm = threading.Event()
 def setAlarmOff():
     """clears the alarm,resets every component involved in it"""
     if alarm.is_set():
-        print("comincio ad annullare l'allarme..")
         alarm.clear()
-        Leds.reset()
-        BuzzControls.reset()
-        print("allarme annullato")
+        LedControls.reset()
+        BuzzerControls.reset()
         
         
 #Whenever the button is pressed, clear the alarm:
 onPinRise(button,setAlarmOff)
-thread(RTC.watchForAlarms,alarmList,alarm,minsAndDistance)
+thread(SnoozeManager.watchForAlarms,alarmList,alarm,minsAndDistance)
 # loop forever
 
 
-time = RTC.ds.get_time()
+time = SnoozeManager.ds.get_time()
 oldHour = time[0]
 oldMinute = time[1]
 disp.clear()
@@ -168,7 +169,7 @@ disp.message("%d Celsius"%temperatura,line=2)
 
 
 while True:
-    time = RTC.ds.get_time()
+    time = SnoozeManager.ds.get_time()
     if oldHour != time[0] or oldMinute != time[1]:
         disp.clear()
         disp.message("%02d:%02d"%time)
